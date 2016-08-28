@@ -6,7 +6,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/flask-api.db'
 
 db = SQLAlchemy(app)
 
+# Register models
 from src.models.client import Client
+# Register controllers
 from src.v1 import feature_request_controller
 
 def init_clients():
