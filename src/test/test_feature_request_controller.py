@@ -24,5 +24,26 @@ class TestFeatureRequestController(unittest.TestCase):
         self.assertIsNotNone(json_response['feature_requests'])
         self.assertEquals(len(json_response['feature_requests']), 0)
 
+    def test_post_new(self):
+        json_payload = {
+            "title": "test_post_new",
+            "description": "Added from unit test"
+        }
+
+        response = self.app.post('/v1/feature_request',
+            data = json.dumps(json_payload),
+            headers = {'Content-Type': 'application/json'})
+
+        self.assertEquals(response.status_code, 201)
+
+        get_all_response = self.app.get('/v1/feature_request')
+        json_response = json.loads(get_all_response.data)
+        self.assertIsNotNone(json_response['feature_requests'])
+        self.assertEquals(len(json_response['feature_requests']), 1)
+        item = json_response['feature_requests'][0]
+        del item['id']
+        self.assertEquals(item, json_payload);
+
+
 if __name__ == '__main__':
     unittest.main()
