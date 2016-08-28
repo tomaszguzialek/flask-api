@@ -10,6 +10,7 @@ db = SQLAlchemy(app)
 from src.models.client import Client
 # Register controllers
 from src.v1 import feature_request_controller
+from src.v1 import client_controller
 
 def init_clients():
     print "Pre-populating clients"
