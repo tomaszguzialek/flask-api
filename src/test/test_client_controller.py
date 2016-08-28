@@ -4,7 +4,7 @@ import unittest
 import tempfile
 import json
 
-class TestFeatureRequestController(unittest.TestCase):
+class TestClientController(unittest.TestCase):
 
     def setUp(self):
         self.db_fd, self.test_db_file = tempfile.mkstemp()
@@ -18,32 +18,30 @@ class TestFeatureRequestController(unittest.TestCase):
         os.close(self.db_fd)
         os.unlink(self.test_db_file)
 
-    def test_get_all_empty_db(self):
-        response = self.app.get('/v1/feature_request')
+    def test_get_all_initial_clients(self):
+        response = self.app.get('/v1/client')
         json_response = json.loads(response.data)
-        self.assertIsNotNone(json_response['feature_requests'])
-        self.assertEquals(len(json_response['feature_requests']), 0)
+        self.assertIsNotNone(json_response['clients'])
+        self.assertEquals(len(json_response['clients']), 2)
 
     def test_post_new(self):
         json_payload = {
-            "title": "test_post_new",
-            "description": "Added from unit test",
-            "client_id": 1
+            "name": "test_post_new_client",
         }
 
-        response = self.app.post('/v1/feature_request',
+        response = self.app.post('/v1/client',
             data = json.dumps(json_payload),
             headers = {'Content-Type': 'application/json'})
 
         self.assertEquals(response.status_code, 201)
 
-        get_all_response = self.app.get('/v1/feature_request')
+        get_all_response = self.app.get('/v1/client')
         json_response = json.loads(get_all_response.data)
-        self.assertIsNotNone(json_response['feature_requests'])
-        self.assertEquals(len(json_response['feature_requests']), 1)
-        item = json_response['feature_requests'][0]
-        del item['id']
-        self.assertEquals(item, json_payload);
+        self.assertIsNotNone(json_response['clients'])
+        self.assertEquals(len(json_response['clients']), 3)
+        item = json_response['clients'][2]
+        self.assertIsNotNone(item['feature_requests']);
+        self.assertEquals(len(item['feature_requests']), 0);
 
 
 if __name__ == '__main__':
