@@ -27,7 +27,8 @@ class TestFeatureRequestController(unittest.TestCase):
     def test_post_new(self):
         json_payload = {
             "title": "test_post_new",
-            "description": "Added from unit test"
+            "description": "Added from unit test",
+            "client_id": 1
         }
 
         response = self.app.post('/v1/feature_request',
