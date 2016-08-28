@@ -1,13 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from v1 import create_v1
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 
 db = SQLAlchemy(app)
 
-app.register_blueprint(create_v1(db))
+from src.v1 import feature_request_controller
 
 def init():
     """Initializes the application"""

@@ -1,4 +1,4 @@
-from app.app import db
+from src.main import db
 
 class FeatureRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
