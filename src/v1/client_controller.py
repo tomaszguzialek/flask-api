@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import request, jsonify
 from src.main import app
 from src.main import db
 from src.models.client import Client
