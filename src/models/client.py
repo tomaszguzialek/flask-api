@@ -2,7 +2,7 @@ from src.main import db
 
 class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
+    name = db.Column(db.String(80), nullable = False)
     feature_requests = db.relationship("FeatureRequest", back_populates="client")
 
     def __init__(self, name):

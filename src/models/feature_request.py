@@ -2,9 +2,9 @@ from src.main import db
 
 class FeatureRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80))
+    title = db.Column(db.String(80), nullable = False)
     description = db.Column(db.String(120))
-    client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+    client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable = False)
     client = db.relationship("Client", back_populates = "feature_requests")
 
     def __init__(self, title, description, client_id):
