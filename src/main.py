@@ -9,6 +9,7 @@ db = SQLAlchemy(app)
 # Register models
 from src.models.client import Client
 # Register controllers
+from src.v1 import auth_controller
 from src.v1 import feature_request_controller
 from src.v1 import client_controller
 

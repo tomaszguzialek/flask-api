@@ -1,2 +1,4 @@
 flask
 flask-sqlalchemy
+sqlalchemy_utils
+passlib
