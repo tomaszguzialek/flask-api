@@ -1,13 +1,33 @@
 from flask import request, jsonify
+from itsdangerous import TimestampSigner
+from functools import wraps
 from src.main import app
 from src.main import db
 from src.models.client import Client
 from src.models.user import User
 
+secret = 'tomasz_has_a_secret'
+
+def validate_auth(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        headers = request.headers
+        if headers['token'] is None:
+            return '', 403
+
+        token = headers['token'].encode('utf8')
+
+        signer = TimestampSigner(secret)
+        try:
+            signer.unsign(token, max_age = 5 * 60);
+            return f(*args, **kwargs)
+        except:
+            return '', 403
+    return wrapper
+
 @app.route("/v1/auth/login", methods = ['POST'])
 def login():
     body = request.get_json()
-    app.logger.info(body)
     if body['login'] is None:
         return '', 403
 
@@ -18,14 +38,20 @@ def login():
     if user.password != body['password']:
         return '', 403
 
-    return jsonify(user = user.jsonify())
+    signer = TimestampSigner(secret)
+    token = signer.sign(body['login']);
 
-def get_all_clients():
-    clients = Client.query.all();
-    return jsonify(clients = [client.jsonify() for client in clients])
+    return jsonify(user = user.jsonify(), token = token )
 
-def add_client(name):
-    client = Client(name)
-    db.session.add(client)
-    db.session.commit()
-    return '', 201
+@app.route("/v1/auth/verify_token", methods = ['POST'])
+def verify_token():
+    body = request.get_json()
+    if body['token'] is None:
+        return '', 403
+
+    signer = TimestampSigner(secret)
+    try:
+        signer.unsign(body['token'], max_age = 5 * 60);
+        return '', 200
+    except:
+        return '', 403
