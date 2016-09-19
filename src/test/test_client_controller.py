@@ -3,6 +3,8 @@ import src.main
 import unittest
 import tempfile
 import json
+from itsdangerous import TimestampSigner
+from src.v1.auth_controller import secret
 
 class TestClientController(unittest.TestCase):
 
@@ -10,6 +12,7 @@ class TestClientController(unittest.TestCase):
         self.db_fd, self.test_db_file = tempfile.mkstemp()
         src.main.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////%s' % self.test_db_file
         src.main.app.config['TESTING'] = True
+        self.signer = TimestampSigner(secret)
         self.app = src.main.app.test_client()
         with src.main.app.app_context():
             src.main.init_app()
@@ -19,7 +22,8 @@ class TestClientController(unittest.TestCase):
         os.unlink(self.test_db_file)
 
     def test_get_all_initial_clients(self):
-        response = self.app.get('/v1/client')
+        from itsdangerous import TimestampSigner
+        response = self.app.get('/v1/client', headers={'token': self.signer.sign('tomasz')})
         json_response = json.loads(response.data)
         self.assertIsNotNone(json_response['clients'])
         self.assertEquals(len(json_response['clients']), 2)
@@ -31,11 +35,11 @@ class TestClientController(unittest.TestCase):
 
         response = self.app.post('/v1/client',
             data = json.dumps(json_payload),
-            headers = {'Content-Type': 'application/json'})
+            headers = {'Content-Type': 'application/json', 'token': self.signer.sign('tomasz')})
 
         self.assertEquals(response.status_code, 201)
 
-        get_all_response = self.app.get('/v1/client')
+        get_all_response = self.app.get('/v1/client', headers={'token': self.signer.sign('tomasz')})
         json_response = json.loads(get_all_response.data)
         self.assertIsNotNone(json_response['clients'])
         self.assertEquals(len(json_response['clients']), 3)

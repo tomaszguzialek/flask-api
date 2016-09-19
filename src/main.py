@@ -9,11 +9,19 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/flask-api.db'
 db = SQLAlchemy(app)
 
 # Register models
+from src.models.user import User
 from src.models.client import Client
 # Register controllers
 from src.v1 import auth_controller
 from src.v1 import feature_request_controller
 from src.v1 import client_controller
+
+def init_users():
+    print "Pre-populating users"
+    user_tomasz = User("tomasz", "admin_obviously")
+    db.session.add(user_tomasz)
+    db.session.commit()
+    print "Users populated"
 
 def init_clients():
     print "Pre-populating clients"
@@ -29,4 +37,5 @@ def init_app():
     print "Initializing the database: %s\n" % app.config['SQLALCHEMY_DATABASE_URI']
     db.create_all()
     print "Database initialized"
+    init_users()
     init_clients()

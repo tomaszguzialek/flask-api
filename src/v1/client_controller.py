@@ -2,8 +2,10 @@ from flask import request, jsonify
 from src.main import app
 from src.main import db
 from src.models.client import Client
+from src.v1.auth_controller import validate_auth
 
 @app.route("/v1/client", methods = ['GET', 'POST'])
+@validate_auth
 def clients():
     if request.method == 'POST':
         body = request.get_json()
