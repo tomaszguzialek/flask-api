@@ -21,11 +21,11 @@ class TestFeatureRequestController(unittest.TestCase):
         os.close(self.db_fd)
         os.unlink(self.test_db_file)
 
-    def test_get_all_empty_db(self):
+    def test_get_all_initial_db(self):
         response = self.app.get('/v1/feature_request', headers={'token': self.signer.sign('tomasz')})
         json_response = json.loads(response.data)
         self.assertIsNotNone(json_response['feature_requests'])
-        self.assertEquals(len(json_response['feature_requests']), 0)
+        self.assertEquals(len(json_response['feature_requests']), 3)
 
     def test_post_new(self):
         json_payload = {
