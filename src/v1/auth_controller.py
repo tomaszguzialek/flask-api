@@ -12,7 +12,7 @@ def validate_auth(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         headers = request.headers
-        if headers['token'] is None:
+        if 'token' not in headers:
             return '', 403
 
         token = headers['token'].encode('utf8')
