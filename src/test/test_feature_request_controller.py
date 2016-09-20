@@ -43,7 +43,7 @@ class TestFeatureRequestController(unittest.TestCase):
         get_all_response = self.app.get('/v1/feature_request', headers={'token': self.signer.sign('tomasz')})
         json_response = json.loads(get_all_response.data)
         self.assertIsNotNone(json_response['feature_requests'])
-        self.assertEquals(len(json_response['feature_requests']), 1)
+        self.assertEquals(len(json_response['feature_requests']), 4) # 3 are pre-populated
         item = json_response['feature_requests'][0]
         del item['id']
         self.assertEquals(item, json_payload);
