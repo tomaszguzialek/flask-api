@@ -52,3 +52,5 @@ def init_app():
     init_users()
     init_clients()
     init_feature_requests()
+
+init_app()
