@@ -15,3 +15,9 @@ gunicorn src.main:app
 
 ## Database
 By default, the app initializes SQLite database in ```/tmp/flask-api.db``` and adds sample data at startup. Remember to remove the DB file to start fresh.
+
+## Tests
+In order to run the tests:
+```
+python -m unittest discover
+```
