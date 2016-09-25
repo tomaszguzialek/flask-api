@@ -1,6 +1,9 @@
 from flask import request, jsonify
 from itsdangerous import TimestampSigner
 from functools import wraps
+import threading
+import datetime
+from sqlalchemy import func
 from src.main import app
 from src.main import db
 from src.models.client import Client
@@ -66,3 +69,11 @@ def logout():
         return '', 200
     except:
         return 'Provided token is invalid or already expired', 400
+
+def cleanup_invalidated_tokens():
+    period = datetime.datetime.utcnow() - datetime.timedelta(seconds = 5 * 60)
+    InvalidatedToken.query.filter(InvalidatedToken.invalidated_date < period).delete()
+    db.session.commit()
+    threading.Timer(5 * 60, cleanup_invalidated_tokens).start()
+
+threading.Timer(5 * 60, cleanup_invalidated_tokens).start()
