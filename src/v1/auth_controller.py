@@ -43,15 +43,21 @@ def login():
 
     return jsonify(user = user.jsonify(), token = token )
 
-@app.route("/v1/auth/verify_token", methods = ['POST'])
-def verify_token():
+@app.route("/v1/auth/logout", methods = ['POST'])
+def logout():
     body = request.get_json()
+
     if body['token'] is None:
-        return '', 403
+        return 'token field is required', 400
+
+    token = body['token'].encode('utf8')
 
     signer = TimestampSigner(secret)
     try:
-        signer.unsign(body['token'], max_age = 5 * 60);
+        signer.unsign(token, max_age = 5 * 60)
+        invalidated_token = InvalidatedToken(body['token'])
+        db.session.add(invalidated_token)
+        db.session.commit()
         return '', 200
     except:
-        return '', 403
+        return 'Provided token is invalid or already expired', 400
