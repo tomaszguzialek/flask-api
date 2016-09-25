@@ -9,7 +9,7 @@ class InvalidatedToken(db.Model):
         self.token = token
 
     def __repr__(self):
-        return '<InvalidatedToken %s, %s>' % self.token, str(self.invalidated_date)
+        return '<InvalidatedToken %s, %s>' % (self.token, str(self.invalidated_date))
 
     def jsonify(self):
        """Return JSON representation of the object"""
