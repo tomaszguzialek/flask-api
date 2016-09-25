@@ -5,6 +5,7 @@ from src.main import app
 from src.main import db
 from src.models.client import Client
 from src.models.user import User
+from src.models.invalidated_token import InvalidatedToken
 
 secret = 'tomasz_has_a_secret'
 
@@ -20,7 +21,11 @@ def validate_auth(f):
         signer = TimestampSigner(secret)
         try:
             signer.unsign(token, max_age = 5 * 60);
-            return f(*args, **kwargs)
+            invalidated_token = InvalidatedToken.query.filter_by(token = token).first()
+            if invalidated_token is None:
+                return f(*args, **kwargs)
+            else:
+                return '', 403
         except:
             return '', 403
     return wrapper
@@ -55,7 +60,7 @@ def logout():
     signer = TimestampSigner(secret)
     try:
         signer.unsign(token, max_age = 5 * 60)
-        invalidated_token = InvalidatedToken(body['token'])
+        invalidated_token = InvalidatedToken(token)
         db.session.add(invalidated_token)
         db.session.commit()
         return '', 200
