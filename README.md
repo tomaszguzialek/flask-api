@@ -10,7 +10,7 @@ pip install -r requirements.txt
 Recommended server to deploy is Gunicorn:
 ```
 pip install gunicorn
-gunicorn src.main:app
+gunicorn src.runner:app
 ```
 
 ## Database
