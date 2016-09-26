@@ -25,6 +25,7 @@ class TestClientController(unittest.TestCase):
         from itsdangerous import TimestampSigner
         response = self.app.get('/v1/client', headers={'token': self.signer.sign('tomasz')})
         json_response = json.loads(response.data)
+        print json_response
         self.assertIsNotNone(json_response['clients'])
         self.assertEquals(len(json_response['clients']), 2)
 

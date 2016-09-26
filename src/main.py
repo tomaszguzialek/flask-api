@@ -44,6 +44,10 @@ def init_feature_requests():
     db.session.commit()
     print "Feature request populated"
 
+def cleanup_invalidated_tokens():
+    print "Starting background thread for cleaning up invalidated tokens"
+    auth_controller.cleanup_invalidated_tokens()
+
 def init_app():
     """Initializes the application"""
     print "Initializing the database: %s\n" % app.config['SQLALCHEMY_DATABASE_URI']

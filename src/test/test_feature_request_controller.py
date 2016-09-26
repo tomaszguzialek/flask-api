@@ -24,6 +24,7 @@ class TestFeatureRequestController(unittest.TestCase):
     def test_get_all_initial_db(self):
         response = self.app.get('/v1/feature_request', headers={'token': self.signer.sign('tomasz')})
         json_response = json.loads(response.data)
+        print json_response
         self.assertIsNotNone(json_response['feature_requests'])
         self.assertEquals(len(json_response['feature_requests']), 3)
 

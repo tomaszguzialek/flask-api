@@ -1,10 +1,14 @@
 from flask import request, jsonify
 from itsdangerous import TimestampSigner
 from functools import wraps
+import threading
+import datetime
+from sqlalchemy import func
 from src.main import app
 from src.main import db
 from src.models.client import Client
 from src.models.user import User
+from src.models.invalidated_token import InvalidatedToken
 
 secret = 'tomasz_has_a_secret'
 
@@ -20,7 +24,11 @@ def validate_auth(f):
         signer = TimestampSigner(secret)
         try:
             signer.unsign(token, max_age = 5 * 60);
-            return f(*args, **kwargs)
+            invalidated_token = InvalidatedToken.query.filter_by(token = token).first()
+            if invalidated_token is None:
+                return f(*args, **kwargs)
+            else:
+                return '', 403
         except:
             return '', 403
     return wrapper
@@ -43,15 +51,28 @@ def login():
 
     return jsonify(user = user.jsonify(), token = token )
 
-@app.route("/v1/auth/verify_token", methods = ['POST'])
-def verify_token():
+@app.route("/v1/auth/logout", methods = ['POST'])
+def logout():
     body = request.get_json()
+
     if body['token'] is None:
-        return '', 403
+        return 'token field is required', 400
+
+    token = body['token'].encode('utf8')
 
     signer = TimestampSigner(secret)
     try:
-        signer.unsign(body['token'], max_age = 5 * 60);
+        signer.unsign(token, max_age = 5 * 60)
+        invalidated_token = InvalidatedToken(token)
+        db.session.add(invalidated_token)
+        db.session.commit()
         return '', 200
     except:
-        return '', 403
+        return 'Provided token is invalid or already expired', 400
+
+def cleanup_invalidated_tokens():
+    print "Running cleanup"
+    period = datetime.datetime.utcnow() - datetime.timedelta(seconds = 5 * 60)
+    InvalidatedToken.query.filter(InvalidatedToken.invalidated_date < period).delete()
+    db.session.commit()
+    threading.Timer(5 * 60, cleanup_invalidated_tokens).start()

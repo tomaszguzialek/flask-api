@@ -54,6 +54,37 @@ class TestAuthController(unittest.TestCase):
             headers = {'Content-Type': 'application/json'})
         self.assertEquals(response.status_code, 403)
 
+    def test_logout(self):
+        login = 'test_user'
+        password = 'test_pass'
+        src.main.db.session.add(User(login, password))
+        src.main.db.session.commit()
+
+        json_payload = {
+            "login": login,
+            "password": password
+        }
+
+        response = self.app.post('/v1/auth/login',
+            data = json.dumps(json_payload),
+            headers = {'Content-Type': 'application/json'})
+        self.assertEquals(response.status_code, 200)
+
+        token = json.loads(response.get_data())['token']
+
+        logout_json_payload = {
+            "token": token
+        }
+
+        self.app.post('/v1/auth/logout',
+            data = json.dumps(logout_json_payload),
+            headers = {'Content-Type': 'application/json'})
+
+        response = self.app.get('/v1/client',
+            headers = {'Content-Type': 'application/json', 'token': token})
+        self.assertEquals(response.status_code, 403)
+
+
     def test_login_inexistent_login(self):
         login = 'test_user'
         password = 'test_pass'
