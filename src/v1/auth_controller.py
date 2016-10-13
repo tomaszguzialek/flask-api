@@ -75,4 +75,6 @@ def cleanup_invalidated_tokens():
     period = datetime.datetime.utcnow() - datetime.timedelta(seconds = 5 * 60)
     InvalidatedToken.query.filter(InvalidatedToken.invalidated_date < period).delete()
     db.session.commit()
-    threading.Timer(5 * 60, cleanup_invalidated_tokens).start()
+    thread = threading.Timer(app.config['CLEANUP_INVALIDATED_TOKENS_INTERVAL_SECONDS'], cleanup_invalidated_tokens)
+    thread.daemon = True
+    thread.start()
