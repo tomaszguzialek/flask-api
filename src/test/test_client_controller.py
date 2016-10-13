@@ -25,9 +25,8 @@ class TestClientController(unittest.TestCase):
         from itsdangerous import TimestampSigner
         response = self.app.get('/v1/client', headers={'token': self.signer.sign('tomasz')})
         json_response = json.loads(response.data)
-        print json_response
         self.assertIsNotNone(json_response['clients'])
-        self.assertEquals(len(json_response['clients']), 2)
+        self.assertEquals(len(json_response['clients']), 0)
 
     def test_post_new(self):
         json_payload = {
@@ -43,8 +42,8 @@ class TestClientController(unittest.TestCase):
         get_all_response = self.app.get('/v1/client', headers={'token': self.signer.sign('tomasz')})
         json_response = json.loads(get_all_response.data)
         self.assertIsNotNone(json_response['clients'])
-        self.assertEquals(len(json_response['clients']), 3)
-        item = json_response['clients'][2]
+        self.assertEquals(len(json_response['clients']), 1)
+        item = json_response['clients'][0]
         self.assertIsNotNone(item['feature_requests']);
         self.assertEquals(len(item['feature_requests']), 0);
 
