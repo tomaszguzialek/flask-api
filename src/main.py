@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/flask-api.db'
+app.config.from_object('src.conf.flask-api-conf')
 
 db = SQLAlchemy(app)
 
