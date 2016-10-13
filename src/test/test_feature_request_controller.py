@@ -21,12 +21,11 @@ class TestFeatureRequestController(unittest.TestCase):
         os.close(self.db_fd)
         os.unlink(self.test_db_file)
 
-    def test_get_all_initial_db(self):
+    def test_get_all_empty_db(self):
         response = self.app.get('/v1/feature_request', headers={'token': self.signer.sign('tomasz')})
         json_response = json.loads(response.data)
-        print json_response
         self.assertIsNotNone(json_response['feature_requests'])
-        self.assertEquals(len(json_response['feature_requests']), 3)
+        self.assertEquals(len(json_response['feature_requests']), 0)
 
     def test_post_new(self):
         json_payload = {
@@ -44,8 +43,8 @@ class TestFeatureRequestController(unittest.TestCase):
         get_all_response = self.app.get('/v1/feature_request', headers={'token': self.signer.sign('tomasz')})
         json_response = json.loads(get_all_response.data)
         self.assertIsNotNone(json_response['feature_requests'])
-        self.assertEquals(len(json_response['feature_requests']), 4) # 3 are pre-populated
-        item = json_response['feature_requests'][3]
+        self.assertEquals(len(json_response['feature_requests']), 1)
+        item = json_response['feature_requests'][0]
         del item['id']
         self.assertEquals(item, json_payload);
 
