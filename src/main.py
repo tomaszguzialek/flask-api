@@ -1,10 +1,14 @@
+import os
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 CORS(app)
-app.config.from_object('src.conf.flask-api-conf')
+
+app.config.from_object('src.conf.flask_api_conf')
+if os.environ.get('KEY_THAT_MIGHT_EXIST') is not None:
+    app.config.from_envvar('FLASK_API_CONF')
 
 db = SQLAlchemy(app)
 
