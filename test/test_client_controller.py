@@ -9,8 +9,7 @@ from src.v1.auth_controller import secret
 class TestClientController(unittest.TestCase):
 
     def setUp(self):
-        self.db_fd, self.test_db_file = tempfile.mkstemp()
-        src.main.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////%s' % self.test_db_file
+        src.main.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
         src.main.app.config['TESTING'] = True
         self.signer = TimestampSigner(secret)
         self.app = src.main.app.test_client()
@@ -18,8 +17,7 @@ class TestClientController(unittest.TestCase):
             src.main.init_app()
 
     def tearDown(self):
-        os.close(self.db_fd)
-        os.unlink(self.test_db_file)
+        pass
 
     def test_get_all_initial_clients(self):
         from itsdangerous import TimestampSigner

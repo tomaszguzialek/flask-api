@@ -9,16 +9,14 @@ import logging
 class TestAuthController(unittest.TestCase):
 
     def setUp(self):
-        self.db_fd, self.test_db_file = tempfile.mkstemp()
-        src.main.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////%s' % self.test_db_file
+        src.main.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
         src.main.app.config['TESTING'] = True
         self.app = src.main.app.test_client()
         with src.main.app.app_context():
             src.main.init_app()
 
     def tearDown(self):
-        os.close(self.db_fd)
-        os.unlink(self.test_db_file)
+        pass
 
     def test_login_success(self):
         login = 'test_user'
