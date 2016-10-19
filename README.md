@@ -21,8 +21,8 @@ cd ..
 fab -H localhost:2222 -u vagrant -p vagrant deploy
 ```
 
-## Database
-By default, the app initializes SQLite database in ```/tmp/flask-api.db``` and adds sample data at startup. Remember to remove the DB file to start fresh.
+## Configuration
+By default, the app initializes SQLite database in ```/tmp/flask-api.db``` and adds sample data at startup (see src/conf/flask_api_conf.py for configuration file). The configuration file can be overriden by a file set in FLASK_API_CONF environmental variable. 
 
 ## Tests
 In order to run the tests:
