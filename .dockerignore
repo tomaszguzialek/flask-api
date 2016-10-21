@@ -1,0 +1,21 @@
+# Items from .gitignore
+*.pyc
+
+.DS_Store
+
+venv
+
+# Development phase files
+test
+deployment
+
+Dockefile
+.dockerignore
+
+.git
+.gitignore
+
+.travis.yml
+
+LICENSE
+README.md
