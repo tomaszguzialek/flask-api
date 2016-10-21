@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 app.config.from_object('src.conf.flask_api_conf')
-if os.environ.get('KEY_THAT_MIGHT_EXIST') is not None:
+if os.environ.get('FLASK_API_CONF') is not None:
     app.config.from_envvar('FLASK_API_CONF')
 
 db = SQLAlchemy(app)
