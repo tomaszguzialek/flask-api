@@ -1,14 +1,13 @@
-import os
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
+from src.conf.app_config import app_config
+
 app = Flask(__name__)
 CORS(app)
 
-app.config.from_object('src.conf.flask_api_conf')
-if os.environ.get('FLASK_API_CONF') is not None:
-    app.config.from_envvar('FLASK_API_CONF')
+app = app_config(app)
 
 db = SQLAlchemy(app)
 
