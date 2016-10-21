@@ -27,8 +27,8 @@ def init_app():
     print "Database initialized"
 
 init_app()
+from src.conf import sample_data
+sample_data.init_users()
 if app.config['INIT_SAMPLE_DATA']:
-    from src.conf import sample_data
-    sample_data.init_users()
     sample_data.init_clients()
     sample_data.init_feature_requests()
