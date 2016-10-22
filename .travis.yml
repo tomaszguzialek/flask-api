@@ -6,10 +6,5 @@ install: "pip install -r requirements.txt"
 # command to run tests
 script: python -m unittest discover
 
-deploy:
-  provider: releases
-  api_key:
-    secure: FD56NspznFaROwJp9BZycpjVPD9fuy9m25S3lFnQaDS93ztCAiBp1h53SrCKsDIZqY7ah9G9+AXP0/0NTJPMYGTH6W7B6oSe0UCvzaSCQpJ/J9fbfdU+rEUupCff6TzxWjsWX+xmawk1fzcfi096vRSEGu4xo/NZ3zYK14M7hewyAn0M4rKaLLWDQpeKRnyLDWK9U5HgP1IE7yXUoQ5qBaBBTqf8P7Z0lrljG8meyP3/u8Cd+TjJMtkhoaqiynkvfffEo3EK97NNMSDYQzz4ANkcq0S2bx0dEfA5OJWc1W3exY/4iJaa4tmKJMYTnZVU2a4LCJeoSNyWccBp4GLGcPEKsPUMjfwVQXNUZCfMM+IjVayEt06FhoofAip4YundL64LqL+VF1dqhUnAmLGkgp91OUUSZYdRX7Rz0EFR2tL3a7yiFfcVfkfThEIphfDycSWhpJ1/w2yk2v/GDgaEDtxTpcEVfdE8a1vv79eXpHmldVw7lhSVfd/yeMaZKkpfX9PEJ6GLdvCspfJbiYvfCVQeeBawSpaBLGzE/i6nxbjCN+btp1shxcimLBZW6vSybYp59TVhtWjV3y2Gd0YLXVTY2zJwhAFrItrsVnrmuek0jF+hVjyl98BC0ChlCJnhrAWhGsnK2/bpbKLi5nqKQHwnQl1G7oiH9biPGzTHBsQ=
-  skip_cleanup: true
-  on:
-    tags: true
+after_success:
+  - ./git-tag.sh
