@@ -1,6 +1,9 @@
+from collections import OrderedDict
 from flask import request, jsonify
 from src.main import app
-from src.main import db
+from src.models.user import User
+
+import json
 
 @app.route("/v1/healthcheck", methods = ['GET'])
 def healthcheck():
@@ -8,9 +11,9 @@ def healthcheck():
     db = True
 
     try:
-        users = User.query.first()
+        userCount = User.query.count()
     except:
-        ok = False
         db = False
+        everything = False
 
-    return jsonify(ok = ok, db = db)
+    return json.dumps(OrderedDict([("everything", ok), ("db", db)]))
