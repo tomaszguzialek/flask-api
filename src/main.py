@@ -13,6 +13,7 @@ db = SQLAlchemy(app)
 
 # Register controllers
 from src.v1 import auth_controller
+from src.v1 import healthcheck_controller
 from src.v1 import feature_request_controller
 from src.v1 import client_controller
 
