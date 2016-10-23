@@ -4,3 +4,4 @@ flask-cors
 sqlalchemy_utils
 itsdangerous
 passlib
+gevent
