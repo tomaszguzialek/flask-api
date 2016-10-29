@@ -13,6 +13,8 @@ COPY . /flask-api
 
 WORKDIR /flask-api
 
+RUN chmod +x wait-for-it.sh
+
 RUN pip install -r requirements.txt
 
 RUN if [ -z ${FLASK_API_CONF+x} ]; then export FLASK_API_CONF=${FLASK_API_CONF}; fi

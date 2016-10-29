@@ -1,0 +1,18 @@
+ version: '2'
+ services:
+   flask-api-mysql:
+     image: mysql
+     ports:
+       - 3306:3306
+     environment:
+       - MYSQL_ROOT_PASSWORD=toor
+       - MYSQL_DATABASE=flask-api-db
+   flask-api:
+     image: tomaszguzialek/flask-api
+     ports:
+       - 5000:5000
+     command: /flask-api/wait-for-it.sh flask-api-mysql:3306 -- gunicorn -b 0.0.0.0:5000 -k gevent src.runner:app
+     environment:
+       - FLASK_API_SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:toor@flask-api-mysql/flask-api-db
+     depends_on:
+       - flask-api-mysql
