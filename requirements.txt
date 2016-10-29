@@ -1,4 +1,5 @@
 flask
+PyMySQL
 flask-sqlalchemy
 flask-cors
 sqlalchemy_utils
