@@ -21,6 +21,8 @@ In order to build a docker container from local repository state:
 docker build -t tomaszguzialek/flask-api .
 ```
 
+The repository contains also ```docker-compose.yml``` file spinning up tomaszguzialek/flask-api container together with a MySQL container.
+
 ### Fabric deployment
 Also, a Fabric file is provided that orchestrates deployment of the master branch on a remote Ubuntu machine via SSH. A test Ubuntu virtual machine can be brought up via Vagrantfile:
 ```
