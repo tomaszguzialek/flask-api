@@ -1,4 +1,4 @@
-# flask-api
+# flask-api [![Build Status](https://travis-ci.org/tomaszguzialek/flask-api.svg?branch=master)](https://travis-ci.org/tomaszguzialek/flask-api)
 RESTful API in Python with Flask.
 
 ## Build
